@@ -143,6 +143,8 @@ It is required that two callback URL(s) are stored in the Shopify app settings.
 
 ![This is an image](./callback-urls.png)
 
+---
+
 ### Follow Me
 
-[![Follow me on LinkedIn](https://img.shields.io/badge/LinkedIn-Aregtech-blue?style=flat&logo=linkedin&logoColor=b0c0c0&labelColor=363D44)](https://www.linkedin.com/company/aregtech) 
+[![Follow me on LinkedIn](https://img.shields.io/badge/LinkedIn-Timo_Zimmermann-blue?style=flat&logo=linkedin&logoColor=b0c0c0&labelColor=363D44)](https://www.linkedin.com/in/timo-zimmermann-9b323b176/) 
