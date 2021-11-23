@@ -1,51 +1,56 @@
 # Introduction
-This demo shows the shopify app (node) authentication process which performs offline and online access mode at the same time.
 
-It is not a ready-made script. I have only attached the most important files for this task.
+This demo shows the shopify app (node) authentication process which performs offline and online access mode at the same
+time.
 
-Thanks to [@luciilucii](https://github.com/luciilucii) for your input.
+It is not a ready-made script. I attached the most important files for this task.
+
+Thanks to [@luciilucii](https://github.com/luciilucii) for input.
 
 ---
 
 ## Setup
-* Shopify Boilerplate embedded app made with Node, Next.js, Shopify-koa-auth, Polaris, and App Bridge React. 
+
+* Shopify Boilerplate embedded app made with Node, Next.js, Shopify-koa-auth, Polaris, and App Bridge React.
 * Session storage mode: `CustomSessionStorage`
-* Database: `Mysql`
+* Database: `Mysql` - SQL Statements in the database.sql file
 
 ---
 
 ## Routing of the `shopifyAuth` process
+
 When installing the app, the first thing we need to do is redirect to the offline access mode process.
 `/install/auth?shop=${shop}`
 
 ```javascript
 router.get("/", async (ctx) => {
-        // get shop
-        const shop = ctx.query.shop;
-        // get current session
-        const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res)
-        // check if shop is active
-        if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
-            // if not a active shop - redirect to complete auth process offline & online
-            ctx.redirect(`/install/auth?shop=${shop}`);
-        } else {
+    // get shop
+    const shop = ctx.query.shop;
+    // get current session
+    const session = await Shopify.Utils.loadCurrentSession(ctx.req, ctx.res)
+    // check if shop is active
+    if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+        // if not a active shop - redirect to complete auth process offline & online
+        ctx.redirect(`/install/auth?shop=${shop}`);
+    } else {
 
-            if (session && session.expires && session.expires <= new Date()) {
-                // if active shop but session is expired - redirect to online authProcess
-                ctx.redirect(`/auth?shop=${shop}`);
-            } else {
-                // load app
-                await handleRequest(ctx);
-            }
+        if (session && session.expires && session.expires <= new Date()) {
+            // if active shop but session is expired - redirect to online authProcess
+            ctx.redirect(`/auth?shop=${shop}`);
+        } else {
+            // load app
+            await handleRequest(ctx);
         }
-    });
+    }
+});
 ```
 
 ---
 
 ## `shopifyAuth` - 1.Step
-In the first step we go through the offline access mode process of the `shopifyAuth`.
-We only store the offline access token in our database here and move on to the online access mode process.
+
+In the first step we go through the offline access mode process of the `shopifyAuth`. We only store the offline access
+token in our database here and move on to the online access mode process.
 
 ```node
 // shopify auth - offline accessMode for offline token
@@ -73,8 +78,10 @@ server.use(
 ---
 
 ## `shopifyAuth` - 2.Step
-In the second step, we go through the normal online access mode process.
-After successful `shopifyAuth`, we are redirected to the embedded app.
+
+In the second step, we go through the normal online access mode process. After successful `shopifyAuth`, we are
+redirected to the embedded app.
+
 ```node
 // shopify auth - online accessMode
 server.use(
@@ -116,8 +123,10 @@ server.use(
 
 ---
 
-## Sessions Data Storage 
+## Sessions Data Storage
+
 Sessions data storage is done via the `customSessionStorage` file.
+
 ```node
 // custom Session Storage in Mysql Database
 const {storeCallback, loadCallback, deleteCallback, setOfflineAccessToken} = require('./customSessionStorage');
@@ -126,6 +135,7 @@ const {storeCallback, loadCallback, deleteCallback, setOfflineAccessToken} = req
 ---
 
 ## Important
+
 It is required that two callback URL(s) are stored in the Shopify app settings.
 
 - `/install/auth/callback`
@@ -134,4 +144,5 @@ It is required that two callback URL(s) are stored in the Shopify app settings.
 ![This is an image](./callback-urls.png)
 
 ### Follow Me
+
 [![Follow me on LinkedIn](https://img.shields.io/badge/LinkedIn-Aregtech-blue?style=flat&logo=linkedin&logoColor=b0c0c0&labelColor=363D44)](https://www.linkedin.com/company/aregtech) 
